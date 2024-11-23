@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile App</title>
+    <style>
+        /* Ensure portrait mode layout */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #ff9e1b; /* New background color */
+            font-family: Arial, sans-serif; /* Changed font to Arial */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+        }
+
+        /* Header bar styling */
+        header {
+            background-color: #c66e00; /* New header color */
+            color: black;
+            padding: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.5rem;
+            box-sizing: border-box;
+        }
+
+        /* Icons in the header aligned to the right */
+        .header-icons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-icons img {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        /* Centered content area */
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        /* Static image above the ID placeholder text */
+        #static-image {
+            width: 30vw; /* 30% of the screen width */
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        /* Placeholder image above the ID picture */
+        #placeholder-image {
+            width: 30vw;
+            height: auto;
+            background-color: #ddd;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* Placeholder text above the ID picture */
+        #placeholder-text {
+            font-size: 1rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        /* ID picture styling (30% of screen width) */
+        #id-picture {
+            width: 30vw;
+            height: auto;
+            object-fit: cover;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        /* Multi-line Text field under the picture (no background) */
+        #name-field {
+            padding: 10px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: transparent;
+            width: 80%;
+            text-align: center;
+            min-height: 60px;
+            resize: vertical;
+            font-family: Arial, sans-serif; /* Set Arial font for the text field */
+        }
+
+        /* QR code container */
+        .qr-code {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 10px;
+            width: 150px;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        /* QR Code image styling */
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            border: none; /* Removed the border from the QR code image */
+        }
+
+        /* Sample text under the QR code */
+        .sample-text {
+            margin-top: 10px;
+            font-size: 1rem;
+            color: black;
+        }
+
+        /* Dark overlay when QR code pops out */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .overlay img {
+            width: 70vw;
+            height: 70vw;
+            object-fit: contain;
+        }
+
+        /* Enlarge QR code */
+        .qr-code.enlarged img {
+            width: 100%;
+            height: 100%;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-icons">
+            <img src="https://via.placeholder.com/20" alt="Icon 1">
+            <img src="https://via.placeholder.com/20" alt="Icon 2">
+        </div>
+        e-Card
+    </header>
+
+    <div class="content">
+        <!-- Static Image above the ID placeholder text -->
+        <img id="static-image" src="https://via.placeholder.com/300x200" alt="Static Image">
+        
+        <!-- Placeholder image above the ID picture -->
+        <div id="placeholder-image">
+            <!-- Placeholder content goes here -->
+        </div>
+
+        <!-- Placeholder text above the ID picture -->
+        <div id="placeholder-text">
+            ALUNO
+        </div>
+
+        <!-- ID picture -->
+        <input type="file" id="file-input" accept="image/*" style="display:none;" onchange="loadImage(event)">
+        <img id="id-picture" src="https://via.placeholder.com/240x320" alt="ID Picture" onclick="triggerFileInput()">
+
+        <!-- Multi-line Editable text field -->
+        <textarea id="name-field" placeholder="" onclick="this.select()">Nome<br>NUSP<br>Faculdade<br>GRADUAÇÃO</textarea>
+
+        <!-- QR Code container -->
+        <div class="qr-code" id="qr-code" onclick="toggleQRCode()">
+            <img id="qr-img" src="https://via.placeholder.com/150x150" alt="QR Code">
+        </div>
+
+        <!-- Sample text under the QR code -->
+        <div class="sample-text">
+            Código QR expira em 15/03/2024 23:59
+        </div>
+    </div>
+
+    <!-- Overlay for the enlarged QR code -->
+    <div class="overlay" id="qr-overlay" onclick="toggleQRCode()">
+        <img id="qr-overlay-img" src="https://via.placeholder.com/150x150" alt="Enlarged QR Code">
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcode"></script>
+    <script>
+        // Function to trigger the file input dialog when the ID picture is clicked
+        function triggerFileInput() {
+            document.getElementById('file-input').click();
+        }
+
+        // Function to load the selected image as the ID picture
+        function loadImage(event) {
+            const picture = document.getElementById('id-picture');
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                picture.src = e.target.result;
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Function to generate a QR code and set it in the QR code container
+        function generateQRCode() {
+            const qrCodeElement = document.getElementById('qr-img');
+            const qrCodeUrl = "https://pudim.com.br";
+            
+            // Use the QRCode library to generate the QR code
+            QRCode.toDataURL(qrCodeUrl, function(err, url) {
+                if (err) {
+                    console.error(err);
+                } else {
+                    qrCodeElement.src = url;
+                    document.getElementById('qr-overlay-img').src = url;
+                }
+            });
+        }
+
+        // Function to toggle the QR code (pop-out effect)
+        function toggleQRCode() {
+            const qrCode = document.getElementById('qr-code');
+            const overlay = document.getElementById('qr-overlay');
+            const body = document.body;
+
+            // Toggle the enlarged state of the QR code and show the overlay
+            if (qrCode.classList.contains('enlarged')) {
+                qrCode.classList.remove('enlarged');
+                overlay.style.display = 'none'; // Hide overlay
+                body.style.overflow = 'auto'; // Restore scrolling
+            } else {
+                qrCode.classList.add('enlarged');
+                overlay.style.display = 'flex'; // Show overlay
+                body.style.overflow = 'hidden'; // Disable scrolling when QR is enlarged
+            }
+        }
+
+        // Generate the QR code when the page loads
+        window.onload = generateQRCode;
+    </script>
+</body>
+</html>
