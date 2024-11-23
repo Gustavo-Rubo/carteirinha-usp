@@ -55,7 +55,7 @@
 
         /* Static image above the ID placeholder text */
         #static-image {
-            width: 30vw; /* 30% of the screen width */
+            width: 40vw; /* 30% of the screen width */
             height: auto;
             margin-bottom: 10px;
         }
@@ -102,9 +102,6 @@
         /* QR code container */
         .qr-code {
             margin-top: 20px;
-            padding: 10px;
-            background-color: white;
-            border-radius: 10px;
             width: 150px;
             height: 150px;
             display: flex;
@@ -123,7 +120,7 @@
         /* Sample text under the QR code */
         .sample-text {
             margin-top: 10px;
-            font-size: 1rem;
+            font-size: 0.7rem;
             color: black;
         }
 
@@ -157,21 +154,16 @@
 </head>
 <body>
     <header>
-        <div class="header-icons">
-            <img src="https://via.placeholder.com/20" alt="Icon 1">
-            <img src="https://via.placeholder.com/20" alt="Icon 2">
-        </div>
         e-Card
+        <div class="header-icons">
+            <img src="bar-code.png" alt="Icon 1">
+            <img src="more.png" alt="Icon 2">
+        </div>
     </header>
 
     <div class="content">
         <!-- Static Image above the ID placeholder text -->
-        <img id="static-image" src="https://via.placeholder.com/300x200" alt="Static Image">
-        
-        <!-- Placeholder image above the ID picture -->
-        <div id="placeholder-image">
-            <!-- Placeholder content goes here -->
-        </div>
+        <img id="static-image" src="logo-usp.png" alt="Static Image">
 
         <!-- Placeholder text above the ID picture -->
         <div id="placeholder-text">
@@ -183,11 +175,11 @@
         <img id="id-picture" src="https://via.placeholder.com/240x320" alt="ID Picture" onclick="triggerFileInput()">
 
         <!-- Multi-line Editable text field -->
-        <textarea id="name-field" placeholder="" onclick="this.select()">Nome<br>NUSP<br>Faculdade<br>GRADUAÇÃO</textarea>
+        <textarea id="name-field" placeholder="" onclick="this.select()">Nome/NUSP/Faculdade/GRADUAÇÃO</textarea>
 
         <!-- QR Code container -->
         <div class="qr-code" id="qr-code" onclick="toggleQRCode()">
-            <img id="qr-img" src="https://via.placeholder.com/150x150" alt="QR Code">
+            <img id="qr-img" src="qr-code.png" alt="QR Code">
         </div>
 
         <!-- Sample text under the QR code -->
@@ -198,7 +190,7 @@
 
     <!-- Overlay for the enlarged QR code -->
     <div class="overlay" id="qr-overlay" onclick="toggleQRCode()">
-        <img id="qr-overlay-img" src="https://via.placeholder.com/150x150" alt="Enlarged QR Code">
+        <img id="qr-overlay-img" src="qr-code.png" alt="Enlarged QR Code">
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/qrcode"></script>
