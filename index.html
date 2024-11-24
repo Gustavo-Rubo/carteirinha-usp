@@ -22,7 +22,7 @@
         header {
             background-color: #c66e00; /* New header color */
             color: black;
-            padding: 20px;
+            padding: 15px;
             width: 100%;
             display: flex;
             justify-content: space-between;
@@ -34,7 +34,7 @@
         /* Icons in the header aligned to the right */
         .header-icons {
             display: flex;
-            gap: 10px;
+            gap: 20px;
         }
 
         .header-icons img {
@@ -49,36 +49,34 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            margin-top: 20px;
+            margin-top: 5px;
             text-align: center;
         }
 
         /* Static image above the ID placeholder text */
         #static-image {
-            width: 40vw; /* 30% of the screen width */
+            width: 46vw; /* 30% of the screen width */
             height: auto;
             margin-bottom: 10px;
+            margin-top: 0px;
+            padding-top: 0px;
         }
 
-        /* Placeholder image above the ID picture */
-        #placeholder-image {
-            width: 30vw;
-            height: auto;
-            background-color: #ddd;
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
-
-        /* Placeholder text above the ID picture */
-        #placeholder-text {
+        #title-field {
             font-size: 1rem;
-            color: #333;
-            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: transparent;
+            height: 20px;
+            width: 80%;
+            text-align: center;
+            resize: vertical;
+            font-family: Arial, sans-serif; /* Set Arial font for the text field */
         }
 
         /* ID picture styling (30% of screen width) */
         #id-picture {
-            width: 35vw;
+            width: 36vw;
             height: auto;
             object-fit: cover;
             cursor: pointer;
@@ -87,12 +85,11 @@
 
         /* Multi-line Text field under the picture (no background) */
         #name-field {
-            padding: 10px;
+            padding: 0px;
             font-size: 1rem;
             border: none;
-            border-radius: 5px;
             background-color: transparent;
-            width: 80%;
+            width: 90%;
             text-align: center;
             min-height: 90px;
             resize: vertical;
@@ -102,8 +99,8 @@
         /* QR code container */
         .qr-code {
             margin-top: 20px;
-            width: 150px;
-            height: 150px;
+            width: 53vw;
+            height: auto;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -166,16 +163,17 @@
         <img id="static-image" src="logo-usp.png" alt="Static Image">
 
         <!-- Placeholder text above the ID picture -->
-        <div id="placeholder-text">
-            ALUNO
-        </div>
+        <textarea id="title-field" placeholder="" onclick="this.select()">ALUNO</textarea>
 
         <!-- ID picture -->
         <input type="file" id="file-input" accept="image/*" style="display:none;" onchange="loadImage(event)">
-        <img id="id-picture" src="https://via.placeholder.com/240x320" alt="ID Picture" onclick="triggerFileInput()">
+        <img id="id-picture" src="id.png" alt="ID Picture" onclick="triggerFileInput()">
 
         <!-- Multi-line Editable text field -->
-        <textarea id="name-field" placeholder="" onclick="this.select()">Nome/NUSP/Faculdade/GRADUAÇÃO</textarea>
+        <textarea id="name-field" placeholder="" onclick="this.select()">Nome
+NUSP
+Faculdade
+GRADUAÇÃO</textarea>
 
         <!-- QR Code container -->
         <div class="qr-code" id="qr-code" onclick="toggleQRCode()">
@@ -183,7 +181,7 @@
         </div>
 
         <!-- Sample text under the QR code -->
-        <div class="sample-text">
+        <div class="sample-text" id='date-text'>
             Código QR expira em 15/03/2024 23:59
         </div>
     </div>
@@ -193,7 +191,6 @@
         <img id="qr-overlay-img" src="qr-code.png" alt="Enlarged QR Code">
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/qrcode"></script>
     <script>
         // Function to trigger the file input dialog when the ID picture is clicked
         function triggerFileInput() {
@@ -215,22 +212,6 @@
             }
         }
 
-        // Function to generate a QR code and set it in the QR code container
-        function generateQRCode() {
-            const qrCodeElement = document.getElementById('qr-img');
-            const qrCodeUrl = "https://pudim.com.br";
-            
-            // Use the QRCode library to generate the QR code
-            QRCode.toDataURL(qrCodeUrl, function(err, url) {
-                if (err) {
-                    console.error(err);
-                } else {
-                    qrCodeElement.src = url;
-                    document.getElementById('qr-overlay-img').src = url;
-                }
-            });
-        }
-
         // Function to toggle the QR code (pop-out effect)
         function toggleQRCode() {
             const qrCode = document.getElementById('qr-code');
@@ -249,8 +230,12 @@
             }
         }
 
-        // Generate the QR code when the page loads
-        window.onload = generateQRCode;
+        function setDateText() {
+            const dateText = document.getElementById('date-text');
+            dateText.innerHTML = 'Código QR expira em ' + new Date().toLocaleDateString('br') + ' 23:59'
+        }
+
+        window.onload = setDateText;
     </script>
 </body>
 </html>
